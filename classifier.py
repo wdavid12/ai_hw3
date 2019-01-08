@@ -13,13 +13,7 @@ class knn_classifier(abstract_classifier):
         distances = euclidean_distance(self.training_data, sample)
         indices = np.argpartition(distances, self.k-1)[:self.k]
         labels = self.training_labels[indices]
-        false_count, true_count = 0, 0
-        for label in labels:
-            if label:
-                true_count += 1
-            else:
-                false_count += 1
-        return true_count > false_count
+        return labels.sum() > (self.k // 2)
 
 
 class knn_factory(abstract_classifier_factory):

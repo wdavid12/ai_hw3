@@ -2,7 +2,7 @@ import numpy as np
 import pickle
 
 def split_in_k(data, num_folds):
-    num_samples = data.shape[0]
+    num_samples = len(data)
     samples_per_fold = num_samples // num_folds
     overflow = num_samples % samples_per_fold
     current = 0
@@ -16,8 +16,7 @@ def split_in_k(data, num_folds):
 
 # assume both arguments are np.array
 def split_groups(data, labels, num_folds):
-    indices = np.arange(data.shape[0])
-    indices = np.random.permutation(indices)
+    indices = np.random.permutation(len(data))
     data = data[indices]
     labels = labels[indices]
 
@@ -25,8 +24,8 @@ def split_groups(data, labels, num_folds):
     false_class = data[np.logical_not(labels)]
     for true_part, false_part in zip(split_in_k(true_class, num_folds), split_in_k(false_class, num_folds)):
         merged = np.concatenate((true_part, false_part), axis=0)
-        l = np.zeros(merged.shape[0], dtype=bool)
-        l[:true_part.shape[0]] = True
+        l = np.zeros(len(merged), dtype=bool)
+        l[:len(true_part)] = True
         yield merged, l
 
 def ecg_file_name(idx):
@@ -50,7 +49,7 @@ def evaluate(factory, k=2):
         samples, classes = zip(*current)
         samples, classes = np.concatenate(samples), np.concatenate(classes)
         test_samples, test_classes = data_set[i]
-        n_test_samples = test_samples.shape[0]
+        n_test_samples = len(test_samples)
 
         good = 0
         clf = factory.train(samples, classes)
@@ -64,14 +63,3 @@ def evaluate(factory, k=2):
         errors.append(1-accuracy)
 
     return np.average(accuracies), np.average(errors)
-
-
-
-
-
-
-
-
-
-
-

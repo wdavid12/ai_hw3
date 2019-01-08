@@ -1,6 +1,6 @@
 import numpy as np
 from classifier import *
-from validation import *
+import validation
 from hw3_utils import *
 
 
@@ -24,5 +24,6 @@ from hw3_utils import *
 
 for i in [1,3,5,7,13]:
     knn = knn_factory(i)
-    print(i,evaluate(knn, 2), sep=',')
+    acc, err = validation.evaluate(knn, 2)
+    print(i,acc,err, sep=',')
 
