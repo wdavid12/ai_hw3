@@ -1,29 +1,31 @@
 import numpy as np
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import Perceptron
+
 from classifier import *
 import validation
 from hw3_utils import *
 
+def knn_validation():
+    for i in [1,3,5,7,13]:
+        knn = knn_factory(i)
+        acc, err = validation.evaluate(knn, 2)
+        print(i,acc,err, sep=',')
 
+def sklearn_validation():
+    clf = DecisionTreeClassifier(criterion='entropy', random_state=0)
+    factory = sklearn_factory(clf)
+    acc, err = validation.evaluate(factory, 2)
+    print(1,acc, err, sep=',')
 
-# train_features, train_labels ,test_features = load_data()
+    clf = Perceptron()
+    factory = sklearn_factory(clf)
+    acc, err = validation.evaluate(factory, 2)
+    print(2,acc, err, sep=',')
 
+def main():
+    # knn_validation()
+    sklearn_validation()
 
-# sick_people = len(train_features[train_labels])
-# print("We have %d sick people" % sick_people)
-
-
-# split_crosscheck_groups(train_features,np.array(train_labels),2)
-
-# for i in range(1,3):
-    # samples, l = load_k_fold_data(i)
-    # print('#'*80)
-    # print('-'*80)
-    # print(samples)
-    # print('-'*80)
-    # print(l)
-
-for i in [1,3,5,7,13]:
-    knn = knn_factory(i)
-    acc, err = validation.evaluate(knn, 2)
-    print(i,acc,err, sep=',')
-
+if __name__ == '__main__':
+    main()

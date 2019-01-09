@@ -25,3 +25,18 @@ class knn_factory(abstract_classifier_factory):
         return knn_classifier(data, labels, self.k)
 
 
+class sklearn_classifier(abstract_classifier):
+    def __init__(self, clf):
+        self.clf = clf
+
+    def classify(self, sample):
+        return self.clf.predict(sample.reshape(1,-1))
+
+
+class sklearn_factory(abstract_classifier_factory):
+    def __init__(self, clf):
+        self.clf = clf
+
+    def train(self, data, labels):
+        self.clf.fit(data, labels)
+        return sklearn_classifier(self.clf)
