@@ -41,8 +41,7 @@ def load_k_fold_data(idx=1):
     with open(ecg_file_name(idx), 'rb') as f:
         return pickle.load(f)
 
-def evaluate(factory, k=2):
-    data_set = [load_k_fold_data(i) for i in range(1,k+1)]
+def evaluate_internal(factory, data_set, k):
     accuracies, errors = [], []
     for i in range(k):
         current = data_set[:i] + data_set[i+1:]
@@ -63,3 +62,13 @@ def evaluate(factory, k=2):
         errors.append(1-accuracy)
 
     return np.average(accuracies), np.average(errors)
+
+
+def evaluate_matrix(factory, X, y, k=2):
+    data_set = [pair for pair in split_groups(X, y, k)]
+    return evaluate_internal(factory, data_set, k)
+
+
+def evaluate(factory, k=2):
+    data_set = [load_k_fold_data(i) for i in range(1,k+1)]
+    return evaluate_internal(factory, data_set, k)

@@ -1,5 +1,16 @@
-from utils import euclidean_distance
 from hw3_utils import  *
+
+def euclidean_distance(a,b):
+    """Euclidean distance for numpy arrays.
+    For a pair of vectors, return the scalar distance.
+    For a vector and a matrix, return the distance of the vector
+    from each row of the matrix (useful for KNN).
+    For a pair of matrices, return the distance between each pair
+    of rows.
+    """
+    diff = a-b
+    diff_squared = diff*diff
+    return np.sqrt(diff_squared.T.sum(axis=0))
 
 class knn_classifier(abstract_classifier):
     def __init__(self, training_data, training_labels, k = 3):

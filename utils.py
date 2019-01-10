@@ -11,3 +11,15 @@ def euclidean_distance(a,b):
     diff = a-b
     diff_squared = diff*diff
     return np.sqrt(diff_squared.T.sum(axis=0))
+
+
+def L1_distance(a,b):
+    diff = a-b
+    diff_abs = np.abs(diff)
+    return diff_abs.T.sum(axis=0)
+
+
+def L3_distance(a,b):
+    diff = a-b
+    diff = np.abs(diff)**3
+    return np.cbrt(diff.T.sum(axis=0))
