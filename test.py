@@ -156,14 +156,12 @@ def fft_test():
     print("Tree", cross_val_score(clf, X_new, y, cv=3).mean())
 
 
-def main():
-    # knn_validation()
-    # sklearn_validation()
+def test_main():
+    knn_validation()
+    sklearn_validation()
     # competition()
     # dot()
     # feature_selection()
     # feature_selection_tree()
-    fft_test()
+    # fft_test()
 
-if __name__ == '__main__':
-    main()

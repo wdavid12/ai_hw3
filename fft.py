@@ -40,6 +40,10 @@ class transformer():
         self.model = SelectFromModel(self.clf, prefit=True, max_features=50, threshold=-np.inf)
 
     def transform_features(self, feats):
+        '''Add FFT features and only keep the most important
+        original features
+        '''
+
         new_feats = []
         fft = np.fft.fft(feats, axis=1)
         fft = np.abs(fft[:,:feats.shape[1] // 2])
@@ -54,23 +58,13 @@ class transformer():
         X_new = self.model.transform(feats)
         return np.concatenate([X_new, new_feats], axis=1)
 
-def main():
+def fft_main():
     orig_feats, labels, test = load_data()
     labels = np.array(labels, dtype=bool)
 
     trans = transformer()
     trans.fit(orig_feats, labels)
     X_new = trans.transform_features(orig_feats)
-
-    print(X_new.shape)
-    # tuning
-
-    clf = RandomForestClassifier(n_estimators=100)
-    print("Result2:", cross_val_score(clf, X_new, labels, cv=2).mean())
-    print("Result3:", cross_val_score(clf, X_new, labels, cv=3).mean())
-    crazy = CrazyClassifier()
-    print("Crazy2", cross_val_score(crazy, X_new, labels, cv=2).mean())
-    print("Crazy3", cross_val_score(crazy, X_new, labels, cv=3).mean())
 
     clf = CrazyClassifier()
     clf = clf.fit(X_new, labels)
@@ -79,7 +73,4 @@ def main():
 
     classes = clf.predict(test_new)
     print(classes)
-    write_prediction(classes)
-
-if __name__ == '__main__':
-    main()
+    # write_prediction(classes)
